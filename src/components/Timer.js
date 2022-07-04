@@ -1,11 +1,6 @@
 import classes from './Timer.module.css';
 import { useEffect, useState } from 'react';
 
-const Timer = (props) => {
-    let timerInterval = null;
-    const [circleDashArrayValue, setCircleDashArrayValue] = useState('283 283');
-    const [instantTransitions, setInstantTransitions] = useState(false);
-
     // Warning occurs at 10s
     const WARNING_THRESHOLD = 30;
 
@@ -25,6 +20,13 @@ const Timer = (props) => {
             threshold: ALERT_THRESHOLD
         }
     };
+
+const Timer = (props) => {
+    let timerInterval = null;
+    const [circleDashArrayValue, setCircleDashArrayValue] = useState('283 283');
+    const [instantTransitions, setInstantTransitions] = useState(false);
+
+
     
     const [colourClass, setColourClass] = useState(classes[COLOUR_CODES.info.colour]);
 
