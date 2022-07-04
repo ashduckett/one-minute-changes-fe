@@ -1,29 +1,38 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+#root, body, html, main {
+    height: 100%;
 }
 
 body {
     background-color: purple;
     background: rgb(2,0,36);
-background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
 }
 
 .results {
     display: inline-block;
+    width: 100%;
 }
 
 .results-container {
     text-align: center;
+    width: 90%;
+    margin: auto;
 }
 
 .result-item {
     height: 100px;
-    width: 100px;
+    width: 12.5%;
     background-color: beige;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .result-row {
@@ -32,7 +41,7 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(
 
 .label-item {
     height: 100px;
-    width: 100px;
+    width: 12.5%;
     background-color: blue;
     color: white;
     display: flex;
@@ -42,5 +51,6 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(
 
 .label-row {
     display: flex;
-    margin-left: 100px;
+    width: 100%;
+    justify-content: flex-end;
 }

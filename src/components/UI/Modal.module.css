@@ -1,0 +1,35 @@
+.modal {
+    /* height: 100px; */
+    /* width: 100px; */
+    background-color: rgb(123, 123, 123);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.top-bar {
+    /* height: 10px; */
+    width: 100%;
+    background-color: green;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 5px 5px;
+    font-size: 20px;
+}
+
+.top-bar svg {
+    display: block;
+
+}
+
+.modal .modal-body {
+    padding: 32px;
+}
+
+.modal .actions {
+    padding: 32px;
+}
