@@ -1,26 +1,10 @@
-import { createStore } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import appSlice from './app-slice';
 
-const reducer = (state = { user: { id: -1 }, results: null, modalOpen: false }, action) => {
+const store = configureStore({
+    reducer: appSlice.reducer
+});
 
-    switch(action.type) {
-        case 'USER_LOG_IN':
-            return {
-                user: action.payload.user,
-                results: action.payload.results
-            };
-        case 'MODAL_TOGGLED':
-            return {
-                ...state,
-                modalOpen: !state.modalOpen,
-                
-            }
-        default:
-            return state;
-
-    }
-    
-};
-
-const store = createStore(reducer);
+export const appActions = appSlice.actions;
 
 export default store;

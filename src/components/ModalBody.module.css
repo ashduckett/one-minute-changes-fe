@@ -14,7 +14,7 @@
 }
 
 .animate-countdown {
-    animation: flash 1s 5 forwards;
+    animation: flash 1s infinite forwards;
 }
 
 .count-field-container {

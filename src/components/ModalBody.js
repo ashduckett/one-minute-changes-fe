@@ -1,47 +1,37 @@
-import { useState, Fragment, useEffect } from 'react';
+import { useState, Fragment, useEffect, useCallback, useRef } from 'react';
 import classes from './ModalBody.module.css';
 import Timer from './Timer';
 
 const ModalBody = (props) => {
-    const [enteredCount, setEnteredCount] = useState('');
     const [countDown, setCountDown] = useState(0);
     const [showClock, setShowClock] = useState(true);
-    let countdownTimer = null;
+    let countdownTimer = useRef();
 
-    const timerExpiredHandler = () => {
+    const { onTimerExpired, countdownStarted, onTimerStarted } = props;
+
+
+    const timerExpiredHandler = useCallback(() => {
         setShowClock(false);
-        props.onTimerExpired();
-        // setClockTimerStarted(false);
+        onTimerExpired();
         setCountDown(0);
         clearInterval(countdownTimer);
-    };
+    }, [onTimerExpired, countdownTimer]);
 
     const enteredCountChangeHandler = (evt) => {
-        setEnteredCount(evt.target.value);
+        props.onCountEntered(evt.target.value);
     };
-    
 
-    const { countdownStarted } = props;
-    // THIS WILL CREATE A NEW TIMER EVERY TIME COUNTDOWNSTARTED CHANGES
     useEffect(() => {
         if (countdownStarted) {
             setShowClock(true);
-            countdownTimer = setInterval(() => {
+            countdownTimer.current = setInterval(() => {
                 if (countdownStarted) {
                     setCountDown(prevState => {
-
-                        // If we've got to the end, start the real clock
-                        if (prevState === 3) {
-                            // console.log('About to fire onTimerStarted')
-                            // props.onTimerStarted();
-                            // console.log('done')
-                        }
-                        
                         // If we haven't then move on
-                        if (prevState !== 4) {
+                        if (prevState !== 60) {
                             return prevState + 1;
                         } else {
-                            clearInterval(countdownTimer);
+                            clearInterval(countdownTimer.current);
                             return prevState;
                         }
                     });
@@ -50,31 +40,38 @@ const ModalBody = (props) => {
         }
 
         return () => {
-            clearInterval(countdownTimer);
+            clearInterval(countdownTimer.current);
             setCountDown(0);
         };
     }, [countdownStarted]);
 
 
     useEffect(() => {
-        console.log('countdown changed ' + countDown)
         if (countDown === 4) {
-            props.onTimerStarted();
+            onTimerStarted();
         }
-    }, [countDown])
+    }, [countDown, onTimerStarted])
 
     const countDownLabels = ['Get Ready!', '3', '2', '1', 'Go!'];
 
+    let label = '';
+
+    if (countDown < 4) {
+        label = countDownLabels[countDown];
+    } else {
+        label = countDown % 2 ? props.fromChordName : props.toChordName;
+    }
+
     return (
         <Fragment>
-            {showClock && <Timer start={60} started={props.clockTimerStarted} onTimerExpired={timerExpiredHandler} />}
+            {showClock && <Timer start={60} running={props.clockTimerStarted} onTimerExpired={timerExpiredHandler} />}
             {!showClock && (
                 <div className={classes['count-field-container']}>
                     <label>How many did you get?</label>
                     <input type='text' onChange={enteredCountChangeHandler} />        
                 </div>
             )}
-            <div className={`${classes['countdown']} ${props.countdownStarted ? classes['animate-countdown'] : ''}` }>{countDownLabels[countDown]}</div>
+            <div className={`${classes['countdown']} ${props.countdownStarted ? classes['animate-countdown'] : ''}` }>{label}</div>
         </Fragment>
     )
 };

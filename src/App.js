@@ -4,15 +4,12 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import Layout from './components/Layout/Layout';
-import Modal from './components/UI/Modal';
 import { useSelector } from 'react-redux';
 
 
 function App() {
+  const user = useSelector(state => state.user);
   
-
-  
-
   return (
     <Layout>
       <Routes>

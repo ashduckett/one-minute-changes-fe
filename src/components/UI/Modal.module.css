@@ -33,3 +33,7 @@
 .modal .actions {
     padding: 32px;
 }
+
+.close-cross {
+    cursor: pointer;
+}

@@ -4,12 +4,9 @@ import classes from './LoginForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-
+import { getCookie } from '../API';
 
 // https://colorlib.com/wp/html5-and-css3-login-forms/
-
-
-// fontawesome.library.add(faCheckSquare, faCoffee);
 
 const RegisterForm = () => {
     // Let's start with useState and look further into useReducer later
@@ -33,19 +30,26 @@ const RegisterForm = () => {
             password: password,
             password_confirmation: confirmPassword
         };
-
-        // Submit it
-        fetch('http://localhost/api/register', {
-            method: 'POST',
-            body: JSON.stringify(formInput),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            console.log(response)
+        
+        fetch('http://localhost/sanctum/csrf-cookie', {
+            credentials: 'include'
+        }).then(r => {
+            const XSRF_TOKEN = getCookie('XSRF-TOKEN');
+            // Submit it
+            fetch('http://localhost/api/register', {
+                method: 'POST',
+                credentials: 'include',
+                body: JSON.stringify(formInput),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-XSRF-TOKEN': XSRF_TOKEN
+                }
+            }).then(response => {
+                console.log(response)
+            });
+            console.log(formInput);
         });
-
-        console.log(formInput);
     };
 
     const firstNameChangeHandler = (event) => {
