@@ -1,4 +1,5 @@
-export const baseUrl = 'http://localhost';
+// export const baseUrl = 'http://localhost';
+export const baseUrl = 'http://omcbe.arise.software';
 
 export const setCookie = (name, value) => {
     document.cookie = name +'='+ value +'; Path=/;';
