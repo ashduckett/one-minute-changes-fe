@@ -4,8 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCookie } from '../API';
+import { getCookie, baseUrl } from '../API';
 import { appActions } from '../store';
+
 // https://colorlib.com/wp/html5-and-css3-login-forms/
 
 const LoginForm = () => {
@@ -46,10 +47,10 @@ const LoginForm = () => {
             password: password
         };
 
-        fetch('http://localhost/sanctum/csrf-cookie', {credentials: 'include'} ).then(() => {
+        fetch(`${baseUrl}/sanctum/csrf-cookie`, {credentials: 'include'} ).then(() => {
             const XSRF_TOKEN = getCookie('XSRF-TOKEN');
 
-            fetch('http://localhost/api/login', {
+            fetch(`${baseUrl}/api/login`, {
                 credentials: 'include',
                 method: 'POST',
                 body: JSON.stringify(submitObj),
@@ -60,7 +61,7 @@ const LoginForm = () => {
             }).then(response => {
                 return response.json();
             }).then(userData => {
-                fetch('http://localhost/api/user/changes', {
+                fetch(`${baseUrl}/api/user/changes`, {
                     credentials: 'include',
                     headers: {
                         'Accept': 'application/json',

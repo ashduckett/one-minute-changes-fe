@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useCallback, useEffect } from 'react';
 import Modal from './UI/Modal';
 import ModalBody from './ModalBody';
-import { getCookie } from '../API';
+import { getCookie, baseUrl } from '../API';
 import { useNavigate } from 'react-router-dom';
 import { appActions } from '../store';
 
@@ -51,7 +51,7 @@ const ResultsGrid = () => {
     useEffect(() => {
         const csrfCookie = getCookie('XSRF-TOKEN');
         if (csrfCookie) {
-            fetch('http://localhost/api/user', {
+            fetch(`${baseUrl}/api/user`, {
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const ResultsGrid = () => {
             }).then(r => {
                 return r.json();
             }).then(userData => {
-                fetch('http://localhost/api/user/changes', {
+                fetch(`${baseUrl}/api/user/changes`, {
                     credentials: 'include',
                     headers: {
                         'Accept': 'application/json',
@@ -105,7 +105,7 @@ const ResultsGrid = () => {
                 };
                 const XSRF_TOKEN = getCookie('XSRF-TOKEN');
 
-                fetch('http://localhost/api/user/change', {
+                fetch(`${baseUrl}/api/user/change`, {
                     credentials: 'include',
                     method: 'POST',
                     body: JSON.stringify(submitObj),

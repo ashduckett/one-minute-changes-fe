@@ -1,3 +1,5 @@
+export const baseUrl = 'http://localhost';
+
 export const setCookie = (name, value) => {
     document.cookie = name +'='+ value +'; Path=/;';
 }

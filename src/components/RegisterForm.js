@@ -4,7 +4,7 @@ import classes from './LoginForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { getCookie } from '../API';
+import { getCookie, baseUrl } from '../API';
 
 // https://colorlib.com/wp/html5-and-css3-login-forms/
 
@@ -31,12 +31,12 @@ const RegisterForm = () => {
             password_confirmation: confirmPassword
         };
         
-        fetch('http://localhost/sanctum/csrf-cookie', {
+        fetch(`${baseUrl}/sanctum/csrf-cookie`, {
             credentials: 'include'
         }).then(r => {
             const XSRF_TOKEN = getCookie('XSRF-TOKEN');
             // Submit it
-            fetch('http://localhost/api/register', {
+            fetch(`${baseUrl}/api/register`, {
                 method: 'POST',
                 credentials: 'include',
                 body: JSON.stringify(formInput),
