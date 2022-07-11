@@ -54,6 +54,7 @@ const ResultsGrid = () => {
             fetch(`${baseUrl}/api/user`, {
                 credentials: 'include',
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'X-XSRF-TOKEN': csrfCookie
                 }
