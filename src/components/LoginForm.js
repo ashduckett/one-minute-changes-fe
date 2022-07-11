@@ -65,7 +65,7 @@ const LoginForm = () => {
                     credentials: 'include',
                     headers: {
                         'Accept': 'application/json',
-                        // 'X-XSRF-TOKEN': XSRF_TOKEN           // This is a protected route, but the credentials cookie is there, you just need
+                        'X-XSRF-TOKEN': XSRF_TOKEN           // This is a protected route, but the credentials cookie is there, you just need
                         // to use credentials include
                     }
                 }).then((r) => r.json()).then(r => {
