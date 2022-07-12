@@ -35,6 +35,7 @@ export const getCookie = (cname) => {
     return "";
 }
 
+
 const requestCookie = () => {
     return fetch(`${baseUrl}/sanctum/csrf-cookie`, {credentials: 'include'});    
 };
