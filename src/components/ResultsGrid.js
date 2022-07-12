@@ -48,36 +48,33 @@ const ResultsGrid = () => {
         setClockTimerStarted(true);
     };
 
-    useEffect(() => {
-        const csrfCookie = getCookie('XSRF-TOKEN');
-        if (csrfCookie) {
-            fetch(`${baseUrl}/api/user`, {
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-XSRF-TOKEN': csrfCookie
-                }
-            }).then(r => {
-                return r.json();
-            }).then(userData => {
-                fetch(`${baseUrl}/api/user/changes`, {
-                    credentials: 'include',
-                    headers: {
-                        'Accept': 'application/json',
-                        // 'X-XSRF-TOKEN': XSRF_TOKEN           // This is a protected route, but the credentials cookie is there, you just need
-                        // to use credentials include
-                    }
-                }).then((r) => r.json()).then(r => {
-                    // dispatch({ type: 'USER_LOG_IN', payload: {user: userData, results: r }}   );
-                    dispatch(appActions.login({ user: userData, results: r }));
-                });
+    // useEffect(() => {
+    //     const csrfCookie = getCookie('XSRF-TOKEN');
+    //     if (csrfCookie) {
+    //         fetch(`${baseUrl}/api/user`, {
+    //             credentials: 'include',
+    //             headers: {
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'application/json',
+    //                 'X-XSRF-TOKEN': csrfCookie
+    //             }
+    //         }).then(r => {
+    //             return r.json();
+    //         }).then(userData => {
+    //             fetch(`${baseUrl}/api/user/changes`, {
+    //                 credentials: 'include',
+    //                 headers: {
+    //                     'Accept': 'application/json',
+    //                 }
+    //             }).then((r) => r.json()).then(r => {
+    //                 dispatch(appActions.login({ user: userData, results: r }));
+    //             });
             
-            });
-        } else {
-            navigate('/login', { replace: true });
-        }
-    }, [dispatch, navigate]);
+    //         });
+    //     } else {
+    //         navigate('/login', { replace: true });
+    //     }
+    // }, [dispatch, navigate]);
 
 
     const chordChangeLogModalActions = [

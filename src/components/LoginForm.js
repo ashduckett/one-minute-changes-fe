@@ -3,8 +3,8 @@ import classes from './LoginForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { getCookie, baseUrl } from '../API';
+import { useDispatch } from 'react-redux';
+import { logIn } from '../API';
 import { appActions } from '../store';
 
 // https://colorlib.com/wp/html5-and-css3-login-forms/
@@ -16,12 +16,8 @@ const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const user = useSelector((currentState) => {
-        return currentState.user;
-    });
-
-    // const cookie = useSelector((currentState) => {
-    //     return currentState.csrfCookie;
+    // const user = useSelector((currentState) => {
+    //     return currentState.user;
     // });
 
     const emailChangeHandler = (event) => {
@@ -34,28 +30,12 @@ const LoginForm = () => {
 
     // On load, load the data and redirect if the user is still logged in and the page has been refreshed
     useEffect(() => {
-        // If you've got here with the URL bar then the cookie state will be lost so it may need to be regenerated.
-        
-        // If the browser has a cookie
-        const csrfCookie = getCookie('XSRF_TOKEN');
-        
-        // If we've hit here, and 
-        if (csrfCookie) {
-            console.log('cookie present')
-        } else {
-            console.log('deleted')
-        }
+        logIn().then(res => {
+            // dispatch(appActions.login({ user: res.user, results: res.results }));
+            // navigate('/', { replace: true });
 
-        // if (cookie) {
-        //     console.log(cookie)
-        // }
-        // const csrfCookie = getCookie('XSRF-TOKEN');
-        // console.log(csrfCookie);
-        // if (user) {
-        //     navigate('/', {replace: true});
-        // }
-
-    }, [navigate]);
+        });
+    }, [navigate, dispatch]);
 
 
     const submitHandler = (event) => {
@@ -66,33 +46,9 @@ const LoginForm = () => {
             password: password
         };
 
-        fetch(`${baseUrl}/sanctum/csrf-cookie`, {credentials: 'include'} ).then(() => {
-            const XSRF_TOKEN = getCookie('XSRF-TOKEN');
-
-            fetch(`${baseUrl}/api/login`, {
-                credentials: 'include',
-                method: 'POST',
-                body: JSON.stringify(submitObj),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-XSRF-TOKEN': XSRF_TOKEN
-                }
-            }).then(response => {
-                return response.json();
-            }).then(userData => {
-                fetch(`${baseUrl}/api/user/changes`, {
-                    credentials: 'include',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-XSRF-TOKEN': XSRF_TOKEN           // This is a protected route, but the credentials cookie is there, you just need
-                        // to use credentials include
-                    }
-                }).then((r) => r.json()).then(r => {
-                    console.log(XSRF_TOKEN)
-                    dispatch(appActions.login({ user: userData, results: r, csrfCookie: XSRF_TOKEN }));
-                    navigate('/', { replace: true });
-                });
-            });
+        logIn(submitObj).then(res => {
+            dispatch(appActions.login({ user: res.user, results: res.results }));
+            navigate('/', { replace: true });
         });
     };
 
