@@ -30,11 +30,11 @@ const LoginForm = () => {
 
     // On load, load the data and redirect if the user is still logged in and the page has been refreshed
     useEffect(() => {
-        logIn().then(res => {
-            // dispatch(appActions.login({ user: res.user, results: res.results }));
-            // navigate('/', { replace: true });
+        // logIn().then(res => {
+        //     // dispatch(appActions.login({ user: res.user, results: res.results }));
+        //     // navigate('/', { replace: true });
 
-        });
+        // });
     }, [navigate, dispatch]);
 
 

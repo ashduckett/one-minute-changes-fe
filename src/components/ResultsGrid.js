@@ -48,8 +48,8 @@ const ResultsGrid = () => {
         setClockTimerStarted(true);
     };
 
-    // useEffect(() => {
-    //     const csrfCookie = getCookie('XSRF-TOKEN');
+    useEffect(() => {
+        const csrfCookie = getCookie('XSRF-TOKEN');
     //     if (csrfCookie) {
     //         fetch(`${baseUrl}/api/user`, {
     //             credentials: 'include',
@@ -74,7 +74,12 @@ const ResultsGrid = () => {
     //     } else {
     //         navigate('/login', { replace: true });
     //     }
-    // }, [dispatch, navigate]);
+
+    if (!csrfCookie) {
+        navigate('/login', { replace: true });
+    }
+
+    }, [dispatch, navigate]);
 
 
     const chordChangeLogModalActions = [
