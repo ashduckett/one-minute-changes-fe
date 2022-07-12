@@ -6,7 +6,8 @@ import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { getCookie, baseUrl, deleteCookie } from '../API';
 import { useDispatch } from 'react-redux';
-import { appActions } from '../store';
+// import { appActions } from '../store';
+import { appActions } from '../store/app-slice';
 
 // https://colorlib.com/wp/html5-and-css3-login-forms/
 

@@ -1,19 +1,17 @@
 import { useSelector, useDispatch } from 'react-redux'; 
 import { useState, useCallback, useEffect } from 'react';
+import { logIn, appActions } from '../store/app-slice';
 import Modal from './UI/Modal';
 import ModalBody from './ModalBody';
 import { getCookie, baseUrl } from '../API';
 import { useNavigate } from 'react-router-dom';
-import { appActions } from '../store';
 
 const ResultsGrid = () => {
     const [chordChangeUserId, setChordChangeUserId] = useState();
     const [chordChange, setChordChange] = useState();
-     
     const [countdownStarted, setCountDownStarted] = useState(false);
     const [clockTimerStarted, setClockTimerStarted] = useState(false);
     const [enteredCount, setEnteredCount] = useState('');
-
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -21,17 +19,19 @@ const ResultsGrid = () => {
     const chordSelected = (userId, chordChange) => {
         setChordChangeUserId(userId);
         setChordChange(chordChange);
-        // dispatch({ type: 'MODAL_TOGGLED' });
         dispatch(appActions.modalToggled());
     };
 
-    const countEnteredHandler = (enteredCount) => {
+    // Store the entered count
+    const countEnteredHandler = enteredCount => {
         setEnteredCount(enteredCount);
     };
 
+    // 
     const modalClosedHandler = () => {
         setCountDownStarted(false);
         setClockTimerStarted(false);
+        dispatch(appActions.modalToggled());
     };
 
     const results = useSelector(state => {
@@ -49,44 +49,25 @@ const ResultsGrid = () => {
     };
 
     useEffect(() => {
-        // This should only fire if we have a cookie and we don't already have results
-        // When should it take you back to the login page? When we don't have either.
+        const setupData = async () => {
+            const csrfCookie = getCookie('XSRF-TOKEN');
 
-        const csrfCookie = getCookie('XSRF-TOKEN');
-        if (csrfCookie && !results) {
-            fetch(`${baseUrl}/api/user`, {
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-XSRF-TOKEN': csrfCookie
+            // If there is a cookie but no results, it means the user has typed the URL which means we need to
+            // get the data again
+            if (csrfCookie && !results) {
+                dispatch(logIn());
+            } else {
+                
+                // If there are no results and no cookie can be used to get them the user is logged out so redirect them.
+                if (!results && !csrfCookie) {
+                    navigate('/login', { replace: true });
                 }
-            }).then(r => {
-                return r.json();
-            }).then(userData => {
-                fetch(`${baseUrl}/api/user/changes`, {
-                    credentials: 'include',
-                    headers: {
-                        'Accept': 'application/json',
-                    }
-                }).then((r) => r.json()).then(r => {
-                    dispatch(appActions.login({ user: userData, results: r }));
-                });
-            
-            });
-        } else {
-            if (!results && !csrfCookie) {
-                navigate('/login', { replace: true });
             }
-        }
-
- 
         
+        };
+        setupData();
 
-        // if (!csrfCookie) {
-        //     navigate('/login', { replace: true });
-        // }
-    }, [dispatch, navigate]);
+    }, [dispatch, navigate, results]);
 
 
     const chordChangeLogModalActions = [
@@ -113,7 +94,6 @@ const ResultsGrid = () => {
                     count: enteredCount,
                     userId: chordChangeUserId
                 };
-                console.log(submitObj)
                 
                 const XSRF_TOKEN = getCookie('XSRF-TOKEN');
                 // Would be nice to use an action creator thunk for this
@@ -138,7 +118,6 @@ const ResultsGrid = () => {
             text: 'Cancel',
             action: () => {
                 modalClosedHandler();
-                dispatch(appActions.modalToggled());
             }
         }
     ];

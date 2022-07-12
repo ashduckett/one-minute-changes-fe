@@ -1,11 +1,11 @@
+import { logIn } from '../store/app-slice';
 import { useEffect, useState } from 'react';
 import classes from './LoginForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logIn, getCookie } from '../API';
-import { appActions } from '../store';
+import { getCookie } from '../API';
 
 // https://colorlib.com/wp/html5-and-css3-login-forms/
 
@@ -15,10 +15,6 @@ const LoginForm = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    // const user = useSelector((currentState) => {
-    //     return currentState.user;
-    // });
 
     const emailChangeHandler = (event) => {
         setEmail(event.target.value);
@@ -34,17 +30,13 @@ const LoginForm = () => {
 
     // On load, load the data and redirect if the user is still logged in and the page has been refreshed
     useEffect(() => {
-        
         const csrfCookie = getCookie('XSRF-TOKEN');
+        
+        // If the user is logged in or we have results we can use anyway, then just show the dashboard.
         if (csrfCookie || results) {
             navigate('/', { replace: true });
         } 
-        // logIn().then(res => {
-        //     // dispatch(appActions.login({ user: res.user, results: res.results }));
-        //     // navigate('/', { replace: true });
-
-        // });
-    }, [navigate, dispatch]);
+    }, [navigate, dispatch, results]);
 
 
     const submitHandler = (event) => {
@@ -55,10 +47,9 @@ const LoginForm = () => {
             password: password
         };
 
-        logIn(submitObj).then(res => {
-            dispatch(appActions.login({ user: res.user, results: res.results }));
-            navigate('/', { replace: true });
-        });
+        // Should probably be some kind of check before navigating. Is it bad to navigate from inside a thunk action creator?
+        dispatch(logIn(submitObj));
+        navigate('/', { replace: true });
     };
 
     return (
@@ -86,7 +77,6 @@ const LoginForm = () => {
             <div className={`${classes['form-controls']} ${classes['align-centre']}`}>
                 <Link to='/register'>Or Sign Up Here</Link>
             </div>
-            
         </form>
     );
 };

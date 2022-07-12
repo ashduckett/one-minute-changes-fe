@@ -1,8 +1,8 @@
 import classes from './MainNavigation.module.css';
-import { deleteCookie, getCookie } from '../API';
+import { deleteCookie } from '../API';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { appActions } from '../store';
+import { appActions } from '../store/app-slice';
 
 const MainNavigation = () => {
     const navigate = useNavigate();
