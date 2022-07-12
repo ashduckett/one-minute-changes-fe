@@ -9,13 +9,13 @@ export const setCookie = (name, value) => {
 export const deleteCookie = (name) => {
     console.log('attempting to delete cookie ' + name)
     // document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    // document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     
-    // if (document.location.hostname === 'localhost') {
-
-    // }
+    if (document.location.hostname === 'localhost') {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    } else {
+        document.cookie = name + '=; path=/; domain=.arise.software; expires=' + new Date(0).toUTCString();
+    }
     console.log(document.location.hostname)
-    document.cookie = name + '=; path=/; domain=' + document.location.hostname + '; expires=' + new Date(0).toUTCString();
     console.log(getCookie(name));
 }
 
