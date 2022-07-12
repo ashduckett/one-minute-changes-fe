@@ -49,36 +49,43 @@ const ResultsGrid = () => {
     };
 
     useEffect(() => {
+        // This should only fire if we have a cookie and we don't already have results
+        // When should it take you back to the login page? When we don't have either.
+
         const csrfCookie = getCookie('XSRF-TOKEN');
-    //     if (csrfCookie) {
-    //         fetch(`${baseUrl}/api/user`, {
-    //             credentials: 'include',
-    //             headers: {
-    //                 'Accept': 'application/json',
-    //                 'Content-Type': 'application/json',
-    //                 'X-XSRF-TOKEN': csrfCookie
-    //             }
-    //         }).then(r => {
-    //             return r.json();
-    //         }).then(userData => {
-    //             fetch(`${baseUrl}/api/user/changes`, {
-    //                 credentials: 'include',
-    //                 headers: {
-    //                     'Accept': 'application/json',
-    //                 }
-    //             }).then((r) => r.json()).then(r => {
-    //                 dispatch(appActions.login({ user: userData, results: r }));
-    //             });
+        if (csrfCookie && !results) {
+            fetch(`${baseUrl}/api/user`, {
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': csrfCookie
+                }
+            }).then(r => {
+                return r.json();
+            }).then(userData => {
+                fetch(`${baseUrl}/api/user/changes`, {
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
+                }).then((r) => r.json()).then(r => {
+                    dispatch(appActions.login({ user: userData, results: r }));
+                });
             
-    //         });
-    //     } else {
-    //         navigate('/login', { replace: true });
-    //     }
+            });
+        } else {
+            if (!results && !csrfCookie) {
+                navigate('/login', { replace: true });
+            }
+        }
 
-    if (!csrfCookie) {
-        navigate('/login', { replace: true });
-    }
+ 
+        
 
+        // if (!csrfCookie) {
+        //     navigate('/login', { replace: true });
+        // }
     }, [dispatch, navigate]);
 
 
@@ -106,8 +113,10 @@ const ResultsGrid = () => {
                     count: enteredCount,
                     userId: chordChangeUserId
                 };
+                console.log(submitObj)
+                
                 const XSRF_TOKEN = getCookie('XSRF-TOKEN');
-
+                // Would be nice to use an action creator thunk for this
                 fetch(`${baseUrl}/api/user/change`, {
                     credentials: 'include',
                     method: 'POST',

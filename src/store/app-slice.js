@@ -18,7 +18,9 @@ const appSlice = createSlice({
             state.csrfCookie = action.payload.csrfCookie;
         },
         logout(state) {
-            state.user = null
+            state.user = null;
+            state.results = null;
+            
         },
         modalToggled(state) {
             state.modalOpen = !state.modalOpen;

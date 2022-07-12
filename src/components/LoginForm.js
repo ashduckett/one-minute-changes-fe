@@ -3,8 +3,8 @@ import classes from './LoginForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logIn } from '../API';
+import { useDispatch, useSelector } from 'react-redux';
+import { logIn, getCookie } from '../API';
 import { appActions } from '../store';
 
 // https://colorlib.com/wp/html5-and-css3-login-forms/
@@ -28,8 +28,17 @@ const LoginForm = () => {
         setPassword(event.target.value);
     };
 
+    const results = useSelector(state => {
+        return state.results;
+    });
+
     // On load, load the data and redirect if the user is still logged in and the page has been refreshed
     useEffect(() => {
+        
+        const csrfCookie = getCookie('XSRF-TOKEN');
+        if (csrfCookie || results) {
+            navigate('/', { replace: true });
+        } 
         // logIn().then(res => {
         //     // dispatch(appActions.login({ user: res.user, results: res.results }));
         //     // navigate('/', { replace: true });

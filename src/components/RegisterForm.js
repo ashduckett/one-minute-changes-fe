@@ -4,7 +4,9 @@ import classes from './LoginForm.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { getCookie, baseUrl } from '../API';
+import { getCookie, baseUrl, deleteCookie } from '../API';
+import { useDispatch } from 'react-redux';
+import { appActions } from '../store';
 
 // https://colorlib.com/wp/html5-and-css3-login-forms/
 
@@ -16,6 +18,7 @@ const RegisterForm = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const dispatch = useDispatch();
 
 
     const onSubmitHandler = (event) => {
@@ -47,8 +50,14 @@ const RegisterForm = () => {
                 }
             }).then(response => {
                 console.log(response)
+                deleteCookie('XSRF-TOKEN');
+            
+                // Clear out the token so the user has to log in.
+                dispatch(appActions.logout());
             });
             console.log(formInput);
+
+           
         });
     };
 
