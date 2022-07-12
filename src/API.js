@@ -1,12 +1,15 @@
-// export const baseUrl = 'http://localhost';
-export const baseUrl = 'http://omcbe.arise.software';
+export const baseUrl = 'http://localhost';
+// export const baseUrl = 'http://omcbe.arise.software';
 
 export const setCookie = (name, value) => {
-    document.cookie = name +'='+ value +'; Path=/;';
+    document.cookie = name +'='+ value +'; path=/;';
+    // document.cookie = name+'=; Max-Age=-99999999;';  
 }
 
 export const deleteCookie = (name) => {
-    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    console.log('attempting to delete cookie ' + name)
+    // document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
 
 export const getCookie = (cname) => {

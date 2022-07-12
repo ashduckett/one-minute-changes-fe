@@ -41,7 +41,9 @@ const LoginForm = () => {
         
         // If we've hit here, and 
         if (csrfCookie) {
-
+            console.log('cookie present')
+        } else {
+            console.log('deleted')
         }
 
         // if (cookie) {
