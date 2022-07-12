@@ -20,6 +20,10 @@ const LoginForm = () => {
         return currentState.user;
     });
 
+    // const cookie = useSelector((currentState) => {
+    //     return currentState.csrfCookie;
+    // });
+
     const emailChangeHandler = (event) => {
         setEmail(event.target.value);
     };
@@ -30,11 +34,24 @@ const LoginForm = () => {
 
     // On load, load the data and redirect if the user is still logged in and the page has been refreshed
     useEffect(() => {
-        const csrfCookie = getCookie('XSRF-TOKEN');
+        // If you've got here with the URL bar then the cookie state will be lost so it may need to be regenerated.
         
+        // If the browser has a cookie
+        const csrfCookie = getCookie('XSRF_TOKEN');
+        
+        // If we've hit here, and 
         if (csrfCookie) {
-            navigate('/', {replace: true});
+
         }
+
+        // if (cookie) {
+        //     console.log(cookie)
+        // }
+        // const csrfCookie = getCookie('XSRF-TOKEN');
+        // console.log(csrfCookie);
+        // if (user) {
+        //     navigate('/', {replace: true});
+        // }
 
     }, [navigate]);
 
@@ -69,7 +86,8 @@ const LoginForm = () => {
                         // to use credentials include
                     }
                 }).then((r) => r.json()).then(r => {
-                    dispatch(appActions.login({ user: userData, results: r }));
+                    console.log(XSRF_TOKEN)
+                    dispatch(appActions.login({ user: userData, results: r, csrfCookie: XSRF_TOKEN }));
                     navigate('/', { replace: true });
                 });
             });

@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = { 
     user: null, 
     results: null, 
-    modalOpen: false 
+    modalOpen: false,
+    csrfCookie: ''
 };
 
 const appSlice = createSlice({
@@ -11,8 +12,10 @@ const appSlice = createSlice({
     initialState,
     reducers: {
         login(state, action) {
+            console.log(action)
             state.user = action.payload.user;
             state.results = action.payload.results;
+            state.csrfCookie = action.payload.csrfCookie;
         },
         logout(state) {
             state.user = null

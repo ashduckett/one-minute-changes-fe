@@ -14,12 +14,9 @@ const MainNavigation = () => {
     
     const onLogout = (e) => {
     
-        // Clear out the cookie
+        // Clear out the cookie - This is not happening fast enough to be able to check for one
+        // on every load of the login page for automatic logging in. Local storage instead?
         deleteCookie('XSRF-TOKEN');
-        console.log('cookie deleted');
-        console.log('cookie is ' + getCookie('XSRF-TOKEN'));
-
-
         dispatch(appActions.logout());
 
         // Send the user back to login
