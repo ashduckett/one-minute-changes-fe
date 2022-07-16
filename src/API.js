@@ -1,3 +1,4 @@
+// Check location object so you don't have to remember to change this
 export const baseUrl = 'http://localhost';
 // export const baseUrl = 'http://omcbe.arise.software';
 

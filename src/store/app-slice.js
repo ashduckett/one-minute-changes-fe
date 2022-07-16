@@ -44,9 +44,9 @@ const appSlice = createSlice({
 });
 
 // Log in method
+// You could probably split this up
 export const logIn = (submitObj) => {
     return async dispatch => {
-        console.log('hit')
         let cookie = null;
         cookie = getCookie('XSRF-TOKEN');
         // If there's no cookie but there is an email and password passed then it has to be a fresh login
@@ -74,14 +74,9 @@ export const logIn = (submitObj) => {
             });
                     
             const finalResponse = await r.json();
-            // return {
-            //     user: userData,
-            //     results: finalResponse,
-            // };
             dispatch(appActions.login({ user: userData, results: finalResponse }));
         } else {
             // Without an email and password, it's safe, though still worth checking, that there's already a logged in user and thus a cookie.
-
             const userResponse = await fetch(`${baseUrl}/api/user`, {
                 credentials: 'include',
                 headers: {

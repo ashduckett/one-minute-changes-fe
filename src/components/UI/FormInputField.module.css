@@ -1,0 +1,33 @@
+
+.form-controls {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.form-controls.align-right {
+    align-items: flex-end;
+}
+
+.form-controls.align-centre {
+    align-items: center;
+}
+
+.login-form-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 10px;
+    border-bottom: 1px solid black;
+    padding-bottom: 8px;
+}
+
+.login-form-input input {
+    flex-grow: 1;
+    padding: 8px 8px;
+    border: none;
+}
+
+.login-form-input input::placeholder {
+    font-family: AnekLatinRegular;
+}
