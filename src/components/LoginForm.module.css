@@ -17,6 +17,20 @@
 
     
 }
+.error-red {
+    color: red;
+}
+
+.login-form .split {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.login-form .split .hidden {
+    visibility: hidden;
+}
+
 .login-form a {
     color: black;
     text-decoration: none;

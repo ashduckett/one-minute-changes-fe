@@ -1,10 +1,10 @@
 import { logIn } from '../store/app-slice';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import classes from './LoginForm.module.css';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCookie } from '../API';
+import { getCookie, deleteCookie } from '../API';
 import FormInputField from './UI/FormInputField';
 
 const validateEmail = (email) => {
@@ -82,13 +82,8 @@ const reducer = (state, action) => {
         case 'PASSWORD_CHANGE':
             let passwordErrorMessage = 'Please enter a password.';
             let passwordExists = action.payload.value.length !== 0;
-            console.log(passwordExists)
 
             passwordErrorMessage = passwordExists ? '' : passwordErrorMessage;
-
-            console.log(passwordErrorMessage)
-            console.log(state.passwordState.wasTouched)
-            console.log(!passwordExists)
             return {
                 ...state,
                 passwordState: {
@@ -109,14 +104,10 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const [formState, formStateDispatch] = useReducer(reducer, initialState);
-
+    const [showInvalidCredentials, setShowInvalidCredentials] = useState(false);
 
     const emailBlurHandler = (event) => {
-        console.log('blur happened')
-        
-        // formStateDispatch({ type: 'EMAIL_CHANGE', payload: { value: event.target.value } });
         formStateDispatch({ type: 'EMAIL_BLUR' });
-
     };
 
     const passwordBlurHandler = (event) => {
@@ -125,10 +116,12 @@ const LoginForm = () => {
 
     const emailChangeHandler = (event) => {
         formStateDispatch({ type: 'EMAIL_CHANGE', payload: { value: event.target.value } });
+        setShowInvalidCredentials(false);
     };
 
     const passwordChangeHandler = (event) => {
         formStateDispatch({ type: 'PASSWORD_CHANGE', payload: { value: event.target.value } });
+        setShowInvalidCredentials(false);
     };
 
     const results = useSelector(state => {
@@ -140,12 +133,15 @@ const LoginForm = () => {
     // On load, load the data and redirect if the user is still logged in and the page has been refreshed
     useEffect(() => {
         const csrfCookie = getCookie('XSRF-TOKEN');
+
         
         // If the user is logged in or we have results we can use anyway, then just show the dashboard.
+        console.log(results)
         if (csrfCookie || results) {
             navigate('/', { replace: true });
         } 
     }, [navigate, dispatch, results]);
+
 
 
     const submitHandler = (event) => {
@@ -160,8 +156,18 @@ const LoginForm = () => {
             };
 
             // Should probably be some kind of check before navigating. Is it bad to navigate from inside a thunk action creator?
-            dispatch(logIn(submitObj));
-            navigate('/', { replace: true });
+            dispatch(logIn(submitObj)).then(response => {
+                console.log(response)
+                if (response.status_code === '401') {
+                    // Bad credentials
+                    console.log('bad credentials');
+                    setShowInvalidCredentials(true);
+                    // For some reason even a bad log in gives you a cookie so remove it if that's the case.
+                    deleteCookie('XSRF-TOKEN');
+                } else {
+                    navigate('/', { replace: true });
+                }
+            });
         }
     };
 
@@ -193,7 +199,11 @@ const LoginForm = () => {
             />
 
             <div className={`${classes['form-controls']} ${classes['align-right']}`}>
-                <a href='#'>Forgotten Password?</a>
+                <div className={classes.split}>
+                    <span className={`${showInvalidCredentials ? classes['error-red'] : classes.hidden}`}>Invalid Credentials</span>
+                    <a href='#'>Forgotten Password?</a>
+                </div>
+
             </div>
             <div className={classes['form-controls']}>
                 <button>Log In</button>

@@ -31,3 +31,7 @@
 .login-form-input input::placeholder {
     font-family: AnekLatinRegular;
 }
+
+.error-red {
+    color: red;
+}

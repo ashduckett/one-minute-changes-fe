@@ -65,17 +65,32 @@ export const logIn = (submitObj) => {
             });
             
             const userData = await responseJSON.json();
-            const r = await fetch(`${baseUrl}/api/user/changes`, {
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-XSRF-TOKEN': cookie
+            
+            console.log(userData);
+          
+            
+            if (userData.status_code !== 401) {
+                console.log('error')
+                const r = await fetch(`${baseUrl}/api/user/changes`, {
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-XSRF-TOKEN': cookie
+                    }
+                });
+                        
+                const finalResponse = await r.json();
+                dispatch(appActions.login({ user: userData, results: finalResponse }));
+                return {
+                    status_code: '200'
                 }
-            });
-                    
-            const finalResponse = await r.json();
-            dispatch(appActions.login({ user: userData, results: finalResponse }));
+            } else {
+                return {
+                    status_code: '401'
+                }
+            }
         } else {
+            console.log('should not get here')
             // Without an email and password, it's safe, though still worth checking, that there's already a logged in user and thus a cookie.
             const userResponse = await fetch(`${baseUrl}/api/user`, {
                 credentials: 'include',
