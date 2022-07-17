@@ -17,7 +17,7 @@ const FormInputField = props => {
                     onBlur={props.onBlur} 
                 />
             </div>
-            {props.displayError && <p className={classes['error-red']}>{props.errorMsg}</p>}
+            <p className={classes['error-red']}>{props.errorMsg}</p>
             
         </div>
     );
