@@ -99,7 +99,7 @@ const LoginForm = () => {
                 });
             }
         }
-
+        console.log('IS FORM VALID?')
         if (isFormValid) {
             const submitObj = {
                 email: formState.emailState.value,
@@ -109,7 +109,7 @@ const LoginForm = () => {
             // Should probably be some kind of check before navigating. Is it bad to navigate from inside a thunk action creator?
             dispatch(logIn(submitObj)).then(response => {
                 if (response.status_code === '401') {
-                    
+
                     // Bad credentials
                     formStateDispatch({ type: INVALID_CREDENTIALS });
 
