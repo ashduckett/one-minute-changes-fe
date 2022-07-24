@@ -99,7 +99,7 @@ const LoginForm = () => {
                 });
             }
         }
-        console.log('IS FORM VALID?')
+
         if (isFormValid) {
             const submitObj = {
                 email: formState.emailState.value,

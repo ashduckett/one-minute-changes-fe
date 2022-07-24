@@ -1,4 +1,21 @@
 .nav {
     height: 100px;
     background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 1;
+    font-family: AnekLatinRegular;
+}
+
+.logout-button {
+    color: white;
+    background-color: transparent;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.welcome {
+    color: white;
 }

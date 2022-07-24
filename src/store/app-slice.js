@@ -70,7 +70,6 @@ export const logIn = (submitObj) => {
           
             
             if (userData.status_code !== 401) {
-                console.log('error')
                 const r = await fetch(`${baseUrl}/api/user/changes`, {
                     credentials: 'include',
                     headers: {

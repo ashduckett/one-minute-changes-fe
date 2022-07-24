@@ -7,7 +7,7 @@ const Modal = (props) => {
         props.onModalClosed();
     };
 
-    const buttons = props.actions.map(actionData => <button key={actionData.text} onClick={actionData.action}>{actionData.text}</button> )
+    const buttons = props.actions.map(actionData => <button className={`${classes.btn} ${classes['btn-primary']}`} key={actionData.text} onClick={actionData.action}>{actionData.text}</button> )
 
     return (
         <div className={classes.modal}>

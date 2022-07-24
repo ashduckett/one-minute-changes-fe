@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'AnekLatinRegular';
     src: local('MyFont'), url(../fonts/AnekLatin-Regular.ttf) format('truetype');
-  }
+}
 
 .login-form {
     font-family: AnekLatinRegular;

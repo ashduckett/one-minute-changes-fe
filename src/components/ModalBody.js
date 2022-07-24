@@ -68,7 +68,7 @@ const ModalBody = (props) => {
             {!showClock && (
                 <div className={classes['count-field-container']}>
                     <label>How many did you get?</label>
-                    <input type='text' onChange={enteredCountChangeHandler} />        
+                    <input type='number' min='0' onChange={enteredCountChangeHandler} />        
                 </div>
             )}
             <div className={`${classes['countdown']} ${props.countdownStarted ? classes['animate-countdown'] : ''}` }>{label}</div>
